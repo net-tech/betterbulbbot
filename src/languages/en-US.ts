@@ -382,6 +382,13 @@ export default {
 		warn: "warn",
 	},
 
+	ban_message_dm: "{{emote_warn}} You have been permanently banned from **{{guild.name}}** for **{{reason}}** `[#{{infraction_id}}]`",
+	tempban_message_dm: "{{emote_warn}} You have been temporarily banned from **{{guild.name}}** until **<t:{{until}}:F>** for **{{reason}}** `[#{{infraction_id}}]`",
+	kick_message_dm: "{{emote_warn}} You have been kicked from **{{guild.name}}** for **{{reason}}** `[#{{infraction_id}}]`",
+	mute_message_dm: "{{emote_warn}} You have been muted in **{{guild.name}}** until **<t:{{until}}:F>** for **{{reason}}** `[#{{infraction_id}}]`",
+	unmute_message_dm: "{{emote_success}} You have been unmuted in **{{guild.name}}** for **{{reason}}** `[#{{infraction_id}}]`",
+	warn_message_dm: "{{emote_warn}} You have been warned in **{{guild.name}}** for **{{reason}}** `[#{{infraction_id}}]`",
+
 	crossban_success: "{{emote_success}} Successfully banned **{{target.tag}}** `({{target.id}})` in {{totalBans}}/{{totalPossible}} servers. Banpools used: {{usedPools}}",
 	crossban_select_pools: "Select the banpools where you want the user to get banned from.",
 	crossban_select_subscribed: "{{amount}} server(s) subscribed",

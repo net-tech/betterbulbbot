@@ -223,6 +223,17 @@ export default class InfractionsManager {
 
 	public async warn(client: BulbBotClient, guild: Guild, target: User, moderator: GuildMember, reasonLog: string, reason: string) {
 		const { id: infID } = await this.createInfraction(guild.id, "Warn", true, reason, target, moderator.user);
+		await target
+			.send({
+				content: await client.bulbutils.translate("warn_message_dm", guild.id, {
+					reason,
+					guild: {
+						name: guild.name,
+					},
+					infraction_id: infID,
+				}),
+			})
+			.catch(() => null);
 		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.warn", guild.id, {}), target, moderator.user, reason, infID);
 
 		return infID;
@@ -231,6 +242,17 @@ export default class InfractionsManager {
 	public async kick(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string) {
 		if (!target.kickable) return null;
 		const { id: infID } = await this.createInfraction(guild.id, "Kick", true, reason, target.user, moderator.user);
+		await target
+			.send({
+				content: await client.bulbutils.translate("kick_message_dm", guild.id, {
+					reason,
+					guild: {
+						name: guild.name,
+					},
+					infraction_id: infID,
+				}),
+			})
+			.catch(() => null);
 		await target.kick(reasonLog);
 		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.kick", guild.id, {}), target.user, moderator.user, reason, infID);
 
@@ -246,12 +268,34 @@ export default class InfractionsManager {
 			return infID;
 		} else if (type == BanType.CLEAN) {
 			const { id: infID } = await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
+			await target
+				.send({
+					content: await client.bulbutils.translate("ban_message_dm", guild.id, {
+						reason,
+						guild: {
+							name: guild.name,
+						},
+						infraction_id: infID,
+					}),
+				})
+				.catch(() => null);
 			await guild.members.ban(target.id, { reason: reasonLog, days });
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else if (type == BanType.SOFT) {
 			const { id: infID } = await this.createInfraction(guild.id, "Soft-ban", true, reason, target, moderator.user);
+			await target
+				.send({
+					content: await client.bulbutils.translate("ban_message_dm", guild.id, {
+						reason,
+						guild: {
+							name: guild.name,
+						},
+						infraction_id: infID,
+					}),
+				})
+				.catch(() => null);
 			await guild.members.ban(target.id, { reason: reasonLog, days });
 			await guild.members.unban(target.id);
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.soft_ban", guild.id, {}), target, moderator.user, reason, infID);
@@ -259,12 +303,34 @@ export default class InfractionsManager {
 			return infID;
 		} else if (type == BanType.POOL) {
 			const { id: infID } = await this.createInfraction(guild.id, "Pool-ban", true, reason, target, moderator.user);
+			await target
+				.send({
+					content: await client.bulbutils.translate("ban_message_dm", guild.id, {
+						reason,
+						guild: {
+							name: guild.name,
+						},
+						infraction_id: infID,
+					}),
+				})
+				.catch(() => null);
 			await guild.members.ban(target, { reason: reasonLog });
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.pool_ban", guild.id, {}), target, moderator.user, reason, infID);
 
 			return infID;
 		} else {
 			const { id: infID } = await this.createInfraction(guild.id, "Ban", true, reason, target, moderator.user);
+			await target
+				.send({
+					content: await client.bulbutils.translate("ban_message_dm", guild.id, {
+						reason,
+						guild: {
+							name: guild.name,
+						},
+						infraction_id: infID,
+					}),
+				})
+				.catch(() => null);
 			await guild.members.cache.get(target.id)?.ban({ reason: reasonLog });
 			await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.ban", guild.id, {}), target, moderator.user, reason, infID);
 
@@ -274,8 +340,20 @@ export default class InfractionsManager {
 
 	public async tempban(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput) {
 		if (!target.bannable || (typeof until !== "number" && typeof until !== "boolean")) return null;
-		await target.ban({ reason: reasonLog });
 		const { id: infID } = await this.createInfraction(guild.id, "Tempban", true, reason, target.user, moderator.user, until);
+		await target
+			.send({
+				content: await client.bulbutils.translate("tempban_message_dm", guild.id, {
+					reason,
+					guild: {
+						name: guild.name,
+					},
+					infraction_id: infID,
+					until: moment(until).unix(),
+				}),
+			})
+			.catch(() => null);
+		await target.ban({ reason: reasonLog });
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.temp_ban", guild.id, {}), target.user, moderator.user, reason, infID, until);
 
 		return infID;
@@ -284,6 +362,18 @@ export default class InfractionsManager {
 	public async mute(client: BulbBotClient, guild: Guild, target: GuildMember, moderator: GuildMember, reasonLog: string, reason: string, until: MomentInput) {
 		await target.timeout(moment(until).diff(moment(), "milliseconds"), reason);
 		const { id: infID } = await this.createInfraction(guild.id, "Mute", true, reason, target.user, moderator.user);
+		await target
+			.send({
+				content: await client.bulbutils.translate("mute_message_dm", guild.id, {
+					reason,
+					guild: {
+						name: guild.name,
+					},
+					infraction_id: infID,
+					until: moment(until).unix(),
+				}),
+			})
+			.catch(() => null);
 		await loggingManager.sendModActionTemp(client, guild, await client.bulbutils.translate("mod_action_types.mute", guild.id, {}), target.user, moderator.user, reason, infID, until);
 
 		return infID;
@@ -292,6 +382,17 @@ export default class InfractionsManager {
 	public async unmute(client: BulbBotClient, guild: Guild, type: MuteType, target: GuildMember, moderator: User, reasonLog: string, reason: string) {
 		await target.timeout(null, reason);
 		const { id: infID } = await this.createInfraction(guild.id, "Unmute", true, reason, target.user, moderator);
+		await target
+			.send({
+				content: await client.bulbutils.translate("unmute_message_dm", guild.id, {
+					reason,
+					guild: {
+						name: guild.name,
+					},
+					infraction_id: infID,
+				}),
+			})
+			.catch(() => null);
 		await loggingManager.sendModAction(client, guild, await client.bulbutils.translate("mod_action_types.unmute", guild.id, {}), target.user, moderator, reason, infID);
 
 		return infID;
