@@ -23,8 +23,8 @@ export const id: Snowflake = "1046572874036690974";
 export const activityName = "the light shine";
 export const type: Exclude<ActivityType, "CUSTOM"> = "WATCHING";
 export const status: PresenceStatusData = "online";
-export const supportInvite = "https://example.com";
-export const botInvite = "https://example.com";
+export const supportInvite = "https://kydzs.com/sparkbot";
+export const botInvite = "https://kydzs.com/sparkbot";
 
 export const discordApi = "https://discord.com/api/v9";
 
