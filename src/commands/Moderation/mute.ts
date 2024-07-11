@@ -52,12 +52,14 @@ export default class Mute extends ApplicationCommand {
 		if (!reason) reason = await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {});
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
 		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
-		if ((duration && duration <= parse("0s")) || duration === null)
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		if ((duration && duration <= parse("0s")!) || duration === null)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
-		if (duration > parse("28d"))
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Checked above
+		if (duration! > parse("28d")!)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_28d", interaction.guild?.id, {}),
 				ephemeral: true,
@@ -80,7 +82,8 @@ export default class Mute extends ApplicationCommand {
 				reason,
 			}),
 			reason,
-			Date.now() + duration,
+			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Checked above
+			Date.now() + duration!,
 		);
 
 		if (infID === null)
@@ -95,7 +98,8 @@ export default class Mute extends ApplicationCommand {
 				target: member.user,
 				reason,
 				infraction_id: infID,
-				until: moment(Date.now() + duration).unix(),
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- Checked above
+				until: moment(Date.now() + duration!).unix(),
 			}),
 		);
 	}

@@ -33,7 +33,8 @@ export default class ReminderSet extends ApplicationSubCommand {
 	}
 
 	public async run(interaction: CommandInteraction): Promise<void> {
-		const duration = parse(interaction.options.getString("duration") as string);
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const duration = parse(interaction.options.getString("duration") as string)!;
 		const message = interaction.options.getString("message") as string;
 
 		if (duration <= 0)
@@ -41,7 +42,8 @@ export default class ReminderSet extends ApplicationSubCommand {
 				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
-		if (duration > parse("1y"))
+		// 1 year
+		if (duration > 31_556_952_000)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_1y", interaction.guild?.id, {}),
 				ephemeral: true,

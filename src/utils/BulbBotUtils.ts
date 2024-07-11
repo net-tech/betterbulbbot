@@ -432,6 +432,7 @@ export default class {
 	/** Return a list of property keys where the values differ between the two objects */
 	public diff<T>(oldObj: T, newObj: T): string[] {
 		const diff: string[] = [];
+		// @ts-expect-error -- they disabled eslint, so they must know it works
 		// eslint-disable-next-line
 		for (const key of Object.keys(oldObj)) {
 			if (!this.objectEquals(oldObj[key], newObj[key])) diff.push(key);
@@ -451,7 +452,6 @@ export default class {
 		if (firstArray instanceof Array !== secondArray instanceof Array) return false;
 		// Don't call this function if you can't guarantee at least one of the arguments is an Array
 		// if (typeof firstArray !== "object") return firstArray === secondArray;
-		// @ts-expect-error
 		if ("equals" in firstArray && typeof firstArray.equals === "function") return firstArray.equals(secondArray);
 		if (firstArray.length !== secondArray.length) return false;
 		const len = firstArray.length;
@@ -489,13 +489,12 @@ export default class {
 		// typeof firstObject === "object" && typeof secondObject === "object"
 		// firstObject !== null && secondObject !== null
 
-		// @ts-expect-error This allows a .equals function to be provided to customize behavior
 		if ("equals" in firstObject && typeof firstObject.equals === "function") {
-			// @ts-expect-error
 			return firstObject.equals(secondObject);
 		}
 		for (const propertyName of Object.keys(firstObject)) {
 			// Ensure every key in firstObject is in secondObject
+			// @ts-expect-error -- we ball
 			if (!(propertyName in secondObject)) {
 				return false;
 			}

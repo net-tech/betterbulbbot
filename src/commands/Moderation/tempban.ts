@@ -46,7 +46,8 @@ export default class Tempban extends ApplicationCommand {
 	public async run(interaction: CommandInteraction): Promise<void> {
 		let member = interaction.options.getMember("member");
 		let infID: number | null;
-		const duration = parse(interaction.options.getString("duration") as string);
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const duration = parse(interaction.options.getString("duration") as string)!;
 		const reason = interaction.options.getString("reason", false) || (await this.client.bulbutils.translate("global_no_reason", interaction.guild?.id, {}));
 
 		if (!(member instanceof GuildMember)) member = (await this.client.bulbfetch.getGuildMember(interaction.guild?.members, interaction.options.get("member")?.value as Snowflake)) as GuildMember;
@@ -58,12 +59,13 @@ export default class Tempban extends ApplicationCommand {
 
 		if (await this.client.bulbutils.resolveUserHandle(interaction, await this.client.bulbutils.checkUser(interaction, member), member.user)) return;
 
-		if (duration <= parse("0s"))
+		if (duration <= 0)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
-		if (duration > parse("1y"))
+		// 1 year
+		if (duration > 31_556_952_000)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_1y", interaction.guild?.id, {}),
 				ephemeral: true,

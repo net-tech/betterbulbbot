@@ -43,6 +43,7 @@ export async function startPrometheus(client: any): Promise<void> {
 
 	const metric = [latency, cachedUsers, websocket, guildCount, guildMemberCount, userCommandUsage];
 	metric.forEach((metric) => {
+		// @ts-expect-error - we ball
 		register.registerMetric(metric);
 	});
 

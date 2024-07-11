@@ -32,14 +32,16 @@ export default class Slowmode extends ApplicationCommand {
 
 	public async run(interaction: CommandInteraction): Promise<void> {
 		const channel: GuildTextBasedChannel = interaction.options.getChannel("channel") as GuildTextBasedChannel;
-		const duration: number = parse(interaction.options.getString("duration") as string, "second");
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		const duration: number = parse(interaction.options.getString("duration") as string, "second")!;
 
 		if (duration < 0)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_0s", interaction.guild?.id, {}),
 				ephemeral: true,
 			});
-		if (duration > parse("6h", "second"))
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+		if (duration > parse("6h", "second")!)
 			return interaction.reply({
 				content: await this.client.bulbutils.translate("duration_invalid_6h", interaction.guild?.id, {}),
 				ephemeral: true,

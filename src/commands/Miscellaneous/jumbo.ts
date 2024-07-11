@@ -41,9 +41,9 @@ export default class Jumbo extends ApplicationCommand {
 		sharp.cache({ files: 0 });
 
 		const realList: string[] = [];
-		for (let i = 0; i < emojis.length; i++) {
-			const customEmoji = emojis[i].match(CustomEmote);
-			if (!customEmoji) realList.push(...emojis[i]);
+		for (const element of emojis) {
+			const customEmoji = element.match(CustomEmote);
+			if (!customEmoji) realList.push(...element);
 			else {
 				realList.push(...customEmoji);
 				if (customEmoji[0].startsWith("<a:")) doesIncludeAnimatedEmoji = true;
@@ -79,16 +79,19 @@ export default class Jumbo extends ApplicationCommand {
 			await sharpCanvas.toFile(`${filesDir}/${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 			jumboList.push(`${interaction.user.id}-${interaction.guild?.id}.${doesIncludeAnimatedEmoji ? "gif" : "png"}`);
 
-			for (let i = 0; i < realList.length; i++) {
-				let emote: Nullable<RegExpMatchArray | string> = realList[i];
-				let emoteName: string;
+			for (const element of realList) {
+				let emote: Nullable<RegExpMatchArray | string | []> = element;
+				let emoteName: string | undefined;
 
 				emote = emote.match(CustomEmote);
 
 				if (emote === null) {
-					emoteName = await emojiUnicode(realList[i]).split(" ").join("-");
+					emoteName = await emojiUnicode(element).split(" ").join("-");
 					if (!(await exists(join(filesDir, `${emoteName}.png`))))
-						await this.downloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName, SIZE, filesDir, TWEMOJI_VERSION);
+						/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+						-- because of the above reassignment it will either be the custom
+						emoji or the unicode emoji name  */
+						await this.downloadEmoji(`https://cdnjs.cloudflare.com/ajax/libs/twemoji/${TWEMOJI_VERSION}/svg/${emoteName}.svg`, "png", emote, emoteName!, SIZE, filesDir, TWEMOJI_VERSION);
 
 					jumboList.push(`${emoteName}.png`);
 				} else {
