@@ -170,8 +170,8 @@ export default class DatabaseManager {
 	// TODO: Fix the schema so we don't have to get the bulbGuild every time we do anything
 	public async updateConfig<
 		T extends "bulbGuild" | "guildLogging" | "guildConfiguration" | "automod",
-		K extends keyof Parameters<typeof prisma[T]["update"]>[0]["data"],
-		V extends Parameters<typeof prisma[T]["update"]>[0]["data"][K],
+		K extends keyof Parameters<(typeof prisma)[T]["update"]>[0]["data"],
+		V extends Parameters<(typeof prisma)[T]["update"]>[0]["data"][K],
 	>({ guild, table, field, value }: { guild: NamedGuild; table: T; field: K; value: V }) {
 		const db = await this.getGuild(guild);
 		// @ts-expect-error TS is a bit scared of this, it's fine I think
