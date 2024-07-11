@@ -5,7 +5,7 @@ import { isNullish } from "../helpers";
 
 export default class {
 	async createBanpool(guildId: Snowflake, poolName: string) {
-		return await prisma.banpool.create({
+		return prisma.banpool.create({
 			data: {
 				name: poolName,
 				bulbGuild: {
@@ -57,7 +57,7 @@ export default class {
 	}
 
 	async joinBanpool(invite: { banpool: Pick<Pick<BanpoolInvite, "banpool">["banpool"], "name"> }, guildId: Snowflake) {
-		return await prisma.banpoolSubscriber.create({
+		return prisma.banpoolSubscriber.create({
 			data: {
 				guildId,
 				banpool: {
@@ -70,7 +70,7 @@ export default class {
 	}
 
 	async getPool(name: string) {
-		return await prisma.banpool.findUnique({
+		return prisma.banpool.findUnique({
 			where: {
 				name,
 			},
@@ -78,7 +78,7 @@ export default class {
 	}
 
 	async getPools(guildId: Snowflake) {
-		return await prisma.banpool.findMany({
+		return prisma.banpool.findMany({
 			where: {
 				bulbGuild: {
 					guildId,
@@ -111,7 +111,7 @@ export default class {
 	}
 
 	async getPoolData(poolname: string) {
-		return await prisma.banpool.findUnique({
+		return prisma.banpool.findUnique({
 			where: {
 				name: poolname,
 			},
@@ -140,7 +140,7 @@ export default class {
 			return;
 		}
 		const { id: banpoolId } = pool;
-		return await prisma.banpoolSubscriber.delete({
+		return prisma.banpoolSubscriber.delete({
 			where: {
 				guildId_banpoolId: {
 					guildId,
@@ -171,7 +171,7 @@ export default class {
 	}
 
 	async deletePool(name: string) {
-		return await prisma.banpool.delete({
+		return prisma.banpool.delete({
 			where: {
 				name,
 			},

@@ -123,7 +123,7 @@ export default class extends Event {
 					if (!executor.bot && executor.id !== newMember.user.id) infraction = await infractionsManager.createInfraction(newMember.guild.id, "Manual Nickname", true, reason, newMember.user, executor);
 					const infID = !isNullish(infraction) ? infraction.id : -1;
 					const translateKey =
-						executor === null || executor.id === newMember.id
+						executor.id === newMember.id
 							? newMember.nickname
 								? "event_member_update_nickname"
 								: "event_member_remove_nickname"

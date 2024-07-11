@@ -15,12 +15,12 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 	if (cache[guild] === undefined) cache[guild] = { mentions: {}, messages: {} };
 
 	if (!cache[guild][category][user]) cache[guild][category][user] = { count: value, time: Date.now() };
-	else cache[guild][category][user]["count"] = cache[guild][category][user]["count"] + value;
+	else cache[guild][category][user]["count"] += value;
 
 	const dbGuild = await databaseManager.getAutoModConfig(message.guild);
 
-	const messageLimit = dbGuild.limitMessages || 0;
-	const mentionsLimit = dbGuild.limitMentions || 0;
+	const messageLimit = dbGuild.limitMessages ?? 0;
+	const mentionsLimit = dbGuild.limitMentions ?? 0;
 
 	if (cache[guild]["messages"][user] && cache[guild]["messages"][user]["count"] >= messageLimit && messageLimit !== 0) {
 		if (!(message.channel instanceof DMChannel) && "name" in message.channel) {
@@ -76,7 +76,7 @@ export async function set(client: BulbBotClient, message: Message, guild: Snowfl
 	setTimeout(function () {
 		if (cache[guild] === undefined || cache[guild][category] === undefined || cache[guild][category][user] === undefined) return;
 
-		cache[guild][category][user]["count"] = cache[guild][category][user]["count"] - value;
+		cache[guild][category][user]["count"] -= value;
 		cache[guild][category][user]["time"] = Date.now();
 		if (cache[guild][category][user]["count"] <= 0) delete cache[guild][category][user];
 		if (Object.keys(cache[guild]["messages"]).length === 0 && Object.keys(cache[guild]["mentions"]).length === 0) delete cache[guild];

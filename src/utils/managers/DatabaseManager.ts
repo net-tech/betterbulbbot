@@ -31,7 +31,7 @@ export default class DatabaseManager {
 			return existingGuild;
 		}
 
-		return await prisma.bulbGuild.create({
+		return prisma.bulbGuild.create({
 			data: {
 				name: guild.name,
 				guildId: guild.id,
@@ -268,7 +268,7 @@ export default class DatabaseManager {
 		})(part);
 
 		const db = await this.getAutoModConfig(guild);
-		return await prisma.automod.update({
+		return prisma.automod.update({
 			data: {
 				[dbkey]: timeout,
 			},
@@ -288,7 +288,7 @@ export default class DatabaseManager {
 			}
 		})(part);
 		const db = await this.getAutoModConfig(guild);
-		return await prisma.automod.update({
+		return prisma.automod.update({
 			data: {
 				[dbkey]: limit,
 			},
@@ -315,7 +315,7 @@ export default class DatabaseManager {
 		const punishmentkey: keyof typeof PunishmentType | null = punishment !== null ? (PunishmentType[punishment] as keyof typeof PunishmentType) ?? null : null;
 
 		const db = await this.getAutoModConfig(guild);
-		return await prisma.automod.update({
+		return prisma.automod.update({
 			data: {
 				[dbkey]: punishmentkey,
 			},
@@ -327,7 +327,7 @@ export default class DatabaseManager {
 
 	async infoBlacklist(snowflakeId: Snowflake) {
 		// TODO: Figure out if snowflakeId is unique
-		return await prisma.blacklistEntry.findFirst({
+		return prisma.blacklistEntry.findFirst({
 			where: {
 				snowflakeId,
 			},
@@ -335,7 +335,7 @@ export default class DatabaseManager {
 	}
 
 	async addBlacklist(isGuild: boolean, name: string, snowflakeId: Snowflake, reason: string, developerId: Snowflake) {
-		return await prisma.blacklistEntry.create({
+		return prisma.blacklistEntry.create({
 			data: {
 				isGuild,
 				name,
@@ -348,7 +348,7 @@ export default class DatabaseManager {
 
 	async removeBlacklist(snowflakeId: Snowflake) {
 		// TODO: Figure out if snowflakeId is unique
-		return await prisma.blacklistEntry.deleteMany({
+		return prisma.blacklistEntry.deleteMany({
 			where: {
 				snowflakeId,
 			},
@@ -357,7 +357,7 @@ export default class DatabaseManager {
 
 	async appendQuickReasons(guild: NamedGuild, reason: string) {
 		const db = await this.getConfig(guild);
-		return await prisma.guildConfiguration.update({
+		return prisma.guildConfiguration.update({
 			data: {
 				quickReasons: [...db.quickReasons, reason],
 			},
@@ -369,7 +369,7 @@ export default class DatabaseManager {
 
 	async removeQuickReason(guild: NamedGuild, reason: string) {
 		const db = await this.getConfig(guild);
-		return await prisma.guildConfiguration.update({
+		return prisma.guildConfiguration.update({
 			data: {
 				quickReasons: db.quickReasons.filter((quickReason) => quickReason !== reason),
 			},
@@ -407,7 +407,7 @@ export default class DatabaseManager {
 	}
 
 	async getUserArchive(authorId: Snowflake, guild: NamedGuild, amount: number | undefined) {
-		return await prisma.messageLog.findMany({
+		return prisma.messageLog.findMany({
 			where: {
 				authorId,
 				bulbGuild: {
@@ -419,7 +419,7 @@ export default class DatabaseManager {
 	}
 
 	async getChannelArchive(channelId: Snowflake, guild: NamedGuild, amount: number | undefined) {
-		return await prisma.messageLog.findMany({
+		return prisma.messageLog.findMany({
 			where: {
 				channelId,
 				bulbGuild: {
@@ -436,7 +436,7 @@ export default class DatabaseManager {
 		const daysAgo = new Date(now - daysInMs);
 		const db = await this.getGuild(guild);
 
-		return await prisma.messageLog.findMany({
+		return prisma.messageLog.findMany({
 			where: {
 				bulbGuildId: db.id,
 				createdAt: {

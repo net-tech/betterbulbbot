@@ -4,7 +4,7 @@ import { isNullish } from "../helpers";
 
 export default class {
 	async addExperimentToGuild(guildId: Snowflake, name: string) {
-		return await prisma.experiment.create({
+		return prisma.experiment.create({
 			data: {
 				name,
 				bulbGuild: {
@@ -25,7 +25,7 @@ export default class {
 		if (isNullish(bulbGuild)) {
 			throw new Error("could not find a bulbGuild for the guild ID");
 		}
-		return await prisma.experiment.delete({
+		return prisma.experiment.delete({
 			where: {
 				bulbGuildId_name: {
 					bulbGuildId: bulbGuild.id,

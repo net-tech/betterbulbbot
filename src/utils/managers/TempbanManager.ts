@@ -3,7 +3,7 @@ import prisma from "../../prisma";
 
 export default class {
 	public async createTempBan(target: GuildMember, reason: string, expireTime: number, guildId: Snowflake) {
-		return await prisma.tempban.create({
+		return prisma.tempban.create({
 			data: {
 				targetId: target.user.id,
 				targetTag: target.user.tag,
@@ -20,7 +20,7 @@ export default class {
 	}
 
 	public async getTempBan(id: number) {
-		return await prisma.tempban.findUnique({
+		return prisma.tempban.findUnique({
 			where: {
 				id,
 			},
@@ -28,7 +28,7 @@ export default class {
 	}
 
 	public async getLatestTempBan(target: GuildMember, guildId: Snowflake) {
-		return await prisma.tempban.findFirst({
+		return prisma.tempban.findFirst({
 			where: {
 				targetId: target.user.id,
 				bulbGuild: {
@@ -42,7 +42,7 @@ export default class {
 	}
 
 	public async deleteTempBan(id: number) {
-		return await prisma.tempban.delete({
+		return prisma.tempban.delete({
 			where: {
 				id,
 			},
@@ -50,6 +50,6 @@ export default class {
 	}
 
 	public async getAllTemBans() {
-		return await prisma.tempban.findMany();
+		return prisma.tempban.findMany();
 	}
 }

@@ -38,7 +38,7 @@ export default class InfractionsManager {
 		if (!infraction) {
 			return null;
 		}
-		return await prisma.infraction.delete({
+		return prisma.infraction.delete({
 			where: {
 				id: infractionId,
 			},
@@ -46,7 +46,7 @@ export default class InfractionsManager {
 	}
 
 	public async getInfraction(guildId: Snowflake, infractionId: number) {
-		return await prisma.infraction.findFirst({
+		return prisma.infraction.findFirst({
 			where: {
 				id: infractionId,
 				bulbGuild: {
@@ -57,7 +57,7 @@ export default class InfractionsManager {
 	}
 
 	public async getOffenderInfractions({ guildId, targetId, ...args }: GetInfractionsParams & Paginatetable) {
-		return await prisma.infraction.findMany({
+		return prisma.infraction.findMany({
 			where: {
 				targetId,
 				bulbGuild: {
@@ -69,7 +69,7 @@ export default class InfractionsManager {
 	}
 
 	public async getModeratorInfractions({ guildId, targetId, ...args }: GetInfractionsParams & Paginatetable) {
-		return await prisma.infraction.findMany({
+		return prisma.infraction.findMany({
 			where: {
 				moderatorId: targetId,
 				bulbGuild: {
@@ -81,7 +81,7 @@ export default class InfractionsManager {
 	}
 
 	public async getAllUserInfractions({ guildId, targetId, ...args }: GetInfractionsParams & Paginatetable) {
-		return await prisma.infraction.findMany({
+		return prisma.infraction.findMany({
 			where: {
 				OR: [
 					{
@@ -131,7 +131,7 @@ export default class InfractionsManager {
 			return;
 		}
 
-		return await prisma.infraction.update({
+		return prisma.infraction.update({
 			data: {
 				active,
 			},
@@ -150,7 +150,7 @@ export default class InfractionsManager {
 			return;
 		}
 
-		return await prisma.infraction.update({
+		return prisma.infraction.update({
 			data: {
 				timeout: timeout ? `${timeout}` : null,
 			},
@@ -164,7 +164,7 @@ export default class InfractionsManager {
 		if (isNullish(await this.getInfraction(guildId, infractionId))) {
 			return;
 		}
-		return await prisma.infraction.update({
+		return prisma.infraction.update({
 			data: {
 				moderator: moderator.tag,
 				moderatorId: moderator.id,
@@ -179,7 +179,7 @@ export default class InfractionsManager {
 		if (isNullish(await this.getInfraction(guildId, infractionId))) {
 			return;
 		}
-		return await prisma.infraction.update({
+		return prisma.infraction.update({
 			data: {
 				reason,
 			},
@@ -190,7 +190,7 @@ export default class InfractionsManager {
 	}
 
 	public async getLatestMute(guildId: Snowflake, targetId: Snowflake) {
-		return await prisma.infraction.findFirst({
+		return prisma.infraction.findFirst({
 			where: {
 				targetId,
 				action: "Mute",
@@ -206,7 +206,7 @@ export default class InfractionsManager {
 	}
 
 	async getLatestInfraction(guildId: Snowflake, moderatorId: Snowflake, targetId: Snowflake, action: string) {
-		return await prisma.infraction.findFirst({
+		return prisma.infraction.findFirst({
 			where: {
 				targetId,
 				moderatorId,

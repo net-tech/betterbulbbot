@@ -1,15 +1,13 @@
 import * as path from "path";
 import { cd, exec } from "shelljs";
 import BulbBotClient from "./BulbBotClient";
-import { promisify } from "util";
-import glob from "glob";
+import { glob } from "glob";
 import Event from "./Event";
 import EventException from "./exceptions/EventException";
 import CommandException from "./exceptions/CommandException";
 import ApplicationCommand from "./ApplicationCommand";
 import prisma from "../prisma";
 
-const globAsync = promisify(glob);
 
 export default class {
 	private readonly client: BulbBotClient;
@@ -28,7 +26,7 @@ export default class {
 
 	async loadCommands(): Promise<void> {
 		this.client.log.client("[CLIENT - COMMANDS] Started registering commands...");
-		return globAsync(`${this.directory}commands/*/*.js`).then((commands: any) => {
+		return glob(`${this.directory}commands/*/*.js`).then((commands: any) => {
 			for (const commandFile of commands) {
 				delete require.cache[commandFile];
 				const { name } = path.parse(commandFile);
@@ -46,7 +44,7 @@ export default class {
 
 	async loadEvents(): Promise<void> {
 		this.client.log.client("[CLIENT - EVENTS] Started registering events...");
-		return globAsync(`${this.directory}events/**/*.js`).then((events: any) => {
+		return glob(`${this.directory}events/**/*.js`).then((events: any) => {
 			for (const eventFile of events) {
 				delete require.cache[eventFile];
 				const { name } = path.parse(eventFile);
@@ -72,8 +70,8 @@ export default class {
 	async loadBlacklist(): Promise<void> {
 		this.client.log.client("[CLIENT - BLACKLIST] Starting to load blacklisted users and guilds...");
 		const blacklistedUsers = await prisma.blacklistEntry.findMany();
-		for (let i = 0; i < blacklistedUsers.length; i++) {
-			const blacklist = blacklistedUsers[i];
+		for (const element of blacklistedUsers) {
+			const blacklist = element;
 			this.client.blacklist.set(blacklist.snowflakeId, {
 				type: blacklist.isGuild ? "guild" : "user",
 				id: blacklist.snowflakeId,

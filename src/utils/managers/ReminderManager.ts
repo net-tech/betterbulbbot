@@ -4,7 +4,7 @@ import { paginate } from "../helpers";
 
 export default class {
 	public async createReminder(reason: string, expireTime: number, userId: Snowflake, channelId: Snowflake, messageId: Snowflake) {
-		return await prisma.reminder.create({
+		return prisma.reminder.create({
 			data: {
 				reason,
 				expireTime,
@@ -17,7 +17,7 @@ export default class {
 
 	public async getReminder(id: number): Promise<any> {
 		// TODO: This really could be inlined
-		return await prisma.reminder.findUnique({
+		return prisma.reminder.findUnique({
 			where: {
 				id,
 			},
@@ -40,7 +40,7 @@ export default class {
 	}
 
 	public async deleteReminder(id: number) {
-		return await prisma.reminder.delete({
+		return prisma.reminder.delete({
 			where: {
 				id,
 			},
@@ -57,6 +57,6 @@ export default class {
 
 	public async getAllReminders() {
 		// TODO: This should be inlined
-		return await prisma.reminder.findMany();
+		return prisma.reminder.findMany();
 	}
 }

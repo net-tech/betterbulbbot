@@ -39,7 +39,7 @@ async function enable(interaction: MessageComponentInteraction, client: BulbBotC
 			.setCustomId("enable")
 			.setLabel(enableButton)
 			.setStyle("SUCCESS")
-			.setDisabled(selectedCategory !== undefined || !!config.enabled),
+			.setDisabled(selectedCategory !== undefined || config.enabled),
 		new MessageButton()
 			.setCustomId("disable")
 			.setLabel(disableButton)

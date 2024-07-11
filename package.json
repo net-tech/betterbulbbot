@@ -41,6 +41,7 @@
 		"dotenv": "^16.0.0",
 		"emoji-unicode": "^2.0.1",
 		"express": "^4.17.3",
+		"glob": "^11.0.0",
 		"i18next": "^21.6.10",
 		"i18next-icu": "^2.0.3",
 		"imghash": "^0.0.9",

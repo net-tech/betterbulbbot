@@ -175,7 +175,7 @@ export default class UserInfo extends ApplicationCommand {
 			description += await this.client.bulbutils.translate("userinfo_embed_infractions", interaction.guild?.id, { inf_emote, user_infractions: infs.length });
 		}
 
-		let avatar = "";
+		let avatar: string;
 		if (user instanceof GuildMember)
 			if (user.user.avatarURL() !== null) avatar = user.user.avatarURL() as string;
 			else avatar = user.user.defaultAvatarURL;
