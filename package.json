@@ -36,7 +36,7 @@
 		"@prisma/client": "3.15.2",
 		"@sentry/node": "^6.17.4",
 		"@sentry/tracing": "^6.17.4",
-		"axios": "^0.25.0",
+		"axios": "^1.7.2",
 		"discord.js": "^13.8.0",
 		"dotenv": "^16.0.0",
 		"emoji-unicode": "^2.0.1",
@@ -56,7 +56,7 @@
 		"prisma": "^3.15.2",
 		"prom-client": "^14.0.1",
 		"safe-timers": "^1.1.0",
-		"sharp": "^0.30.5",
+		"sharp": "^0.33.4",
 		"shelljs": "^0.8.5",
 		"unicode": "^14.0.0",
 		"winston": "^3.5.1"
